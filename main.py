@@ -5,4 +5,9 @@ import transform
 #smhi_wind_data = transform.csv_to_dict('data/smhi-vind.csv')
 #print(transform.convert_smhi_wind_data_to_timeseries_dict(smhi_wind_data))
 
-transform.merge_data_sources()
+#transform.merge_data_sources()
+
+data = transform.json_to_dict('data/data.json')
+print(type(data))
+print(data)
+transform.plot_data(data, 'rain', 'bensin')

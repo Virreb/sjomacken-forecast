@@ -140,3 +140,49 @@ def invert_list_of_dicts_by_key(list_of_dicts, key_to_invert_by='_id', dict_entr
                 new_dict[tmp_key] = default_value  # add a new key field
 
     return new_dict
+
+
+def merge_dicts(a, b):
+    """merges dict b into dict a and return merged result recursively
+
+        NB: b is merged into a -- and dicts are immutable objects => the following would lead to undesired behaviour
+
+        b = dict( .. )
+        a = dict(.. )
+
+        tmp = a
+
+        a = merge_dicts(a, b)
+        print(a)
+        print(tmp) <--- tmp is now merged aswell!
+
+        Solution: use copy.deepcopy in the input to merge_dicts
+
+    NOTE: tuples and arbitrary objects are not handled as it is totally ambiguous what should happen"""
+
+    key = None
+
+    if isinstance(a, int) or isinstance(a, float):
+        # add dict values together
+        if b is not None:
+            a += b
+    elif a is None or isinstance(a, str):
+        # If it's a string, overwrite
+        a = b
+    elif isinstance(a, list):
+        # lists can be only appended
+        if isinstance(b, list):
+            # merge lists
+            a.extend(b)
+        else:
+            # append to list
+            a.append(b)
+    elif isinstance(a, dict):
+        # dicts must be merged recursively
+        if isinstance(b, dict):
+            for key in b:
+                if key in a:
+                    a[key] = merge_dicts(a[key], b[key])
+                else:
+                    a[key] = b[key]
+    return a

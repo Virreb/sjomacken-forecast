@@ -1,4 +1,4 @@
-Datum,Bensin,Diesel,Gasol,Tillbehör,Kiosk,Service,Båtuthyrning,Kajakuthyrning,Skoteruthyrning,Totalt
+datum,bensin,diesel,gasol,tillbehör,kiosk,service,båtuthyrning,kajakuthyrning,skoteruthyrning,totalt
 2013-06-14,1,0,0,0,59,,0,,,60
 2013-06-18,1839,7142,1300,451,523,,400,,,11655
 2013-06-19,0,0,0,0,0,,0,,,0

@@ -60,7 +60,7 @@ def csv_timeseries_to_dict(file_path=None, list_of_lists=None, break_date=None):
     import csv, datetime, help_functions as hf
 
     if break_date is None:
-        break_date = datetime.date(2013, 1, 1)
+        break_date = datetime.date(2013, 1, 1)  # Only use data after the break date
 
     time_series_dict = dict()
     if file_path is not None:
@@ -78,8 +78,9 @@ def csv_timeseries_to_dict(file_path=None, list_of_lists=None, break_date=None):
         else:
 
             date = datetime.datetime.strptime(row[0], '%Y-%m-%d').date()
-            if date < break_date:
+            if date < break_date:   # skip if date before break date
                 continue
+
             date = date.toordinal()
 
             for col_nbr, cell in enumerate(row):
@@ -110,7 +111,7 @@ def convert_kortautomat_data_to_timeseries_dict(list_of_dicts, break_date=None):
     for d in list_of_dicts:
         date = datetime.datetime.strptime(d['datum'], '%Y-%m-%d %H:%M').date()
 
-        if date < break_date:
+        if date < break_date:   # skip if date before break date
             continue
 
         date = date.toordinal()
@@ -140,7 +141,7 @@ def convert_smhi_wind_data_to_timeseries_dict(list_of_dicts, break_date=None):
     for d in list_of_dicts:
         date = datetime.datetime.strptime(d['datum'], '%Y-%m-%d').date()
 
-        if date < break_date:
+        if date < break_date:   # skip if date before break date
             continue
 
         date = date.toordinal()
@@ -169,6 +170,7 @@ def merge_data_sources():
     smhi_wind_data = csv_to_dict('data/smhi-vind.csv')
     smhi_wind_data = convert_smhi_wind_data_to_timeseries_dict(smhi_wind_data)
 
+    # create init dict with every product set to 0.0 for the store data (uthyrning, kiosk, etc)
     store_groups = store_data[list(store_data.keys())[0]].keys()
     init_dict = dict()
     for g in store_groups:
@@ -176,9 +178,7 @@ def merge_data_sources():
 
     data = dict()
     data = hf.merge_dicts(data, store_data)
-    print(len(data.keys()))
     data = hf.merge_dicts(data, card_machine_data)
-    print(len(data.keys()))
     for date in data:
 
         data[date]['date'] = date
